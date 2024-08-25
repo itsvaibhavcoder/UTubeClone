@@ -9,8 +9,8 @@ import { GoDownload } from "react-icons/go";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { LuSendHorizonal } from "react-icons/lu";
 import LiveChat from './LiveChat';
-import {useDispatch} from "react-redux";
-import {setMessage} from "../utils/chatSlice";
+import { useDispatch } from "react-redux";
+import { setMessage } from "../utils/chatSlice";
 
 const Watch = () => {
     const [input, setInput] = useState("");
@@ -19,25 +19,23 @@ const Watch = () => {
     const videoId = searchParams.get('v');
     const dispatch = useDispatch();
 
-    const getSingleVideo = async () => {
-        try {
-            const res = await axios.get(`https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${videoId}&key=${API_KEY}`);
-            setSingleVideo(res?.data?.items[0]);
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    useEffect(() => {
+        const getSingleVideo = async () => {
+            try {
+                const res = await axios.get(`https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${videoId}&key=${API_KEY}`);
+                setSingleVideo(res?.data?.items[0]);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        getSingleVideo();
+    }, [videoId]);
 
     const sendMessage = () => {
-        dispatch(setMessage({name:"Patel", message:input}));
+        dispatch(setMessage({ name: "Patel", message: input }));
         setInput("");
-    }
-
-    useEffect(() => {
-        getSingleVideo();
-    }, []);
-
-
+    };
 
     return (
         <div className='flex ml-4 w-[100%] mt-2'>
@@ -49,9 +47,8 @@ const Watch = () => {
                         src={`https://www.youtube.com/embed/${videoId}?&autoplay=0`}
                         title="YouTube video player"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowFullScreen>
-
-                    </iframe>
+                        allowFullScreen
+                    ></iframe>
                     <h1 className='font-bold mt-2 text-lg'>{singleVideo?.snippet?.title}</h1>
                     <div className='flex items-center justify-between'>
                         <div className='flex items-center justify-between w-[35%]'>
@@ -85,13 +82,18 @@ const Watch = () => {
                     <div className='overflow-y-auto h-[28rem] flex flex-col-reverse'>
                         <LiveChat />
                     </div>
-
                     <div className='flex items-center justify-between border-t p-2'>
                         <div className='flex items-center w-[90%]'>
                             <div>
                                 <Avatar src="https://play-lh.googleusercontent.com/C9CAt9tZr8SSi4zKCxhQc9v4I6AOTqRmnLchsu1wVDQL0gsQ3fmbCVgQmOVM1zPru8UH=w240-h480-rw" size={35} round={true} />
                             </div>
-                            <input value={input} onChange={(e) => setInput(e.target.value)} className='border-b border-gray-300 outline-none ml-2' type="text" placeholder='Send message...' />
+                            <input
+                                value={input}
+                                onChange={(e) => setInput(e.target.value)}
+                                className='border-b border-gray-300 outline-none ml-2'
+                                type="text"
+                                placeholder='Send message...'
+                            />
                             <div className='bg-gray-200 cursor-pointer p-2 rounded-full'>
                                 <LuSendHorizonal onClick={sendMessage} />
                             </div>
@@ -99,9 +101,8 @@ const Watch = () => {
                     </div>
                 </div>
             </div>
-
         </div>
-    )
-}
+    );
+};
 
-export default Watch
+export default Watch;
