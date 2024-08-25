@@ -18,7 +18,7 @@ const LiveChat = () => {
             clearInterval(timer)
         })
         
-    },[])
+    },[dispatch])
 
     return (
         <div className='px-4 py-1'>

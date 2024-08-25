@@ -17,7 +17,7 @@ const VideoCart = ({item}) => {
 
     useEffect(()=>{
         getYoutubeChannelName();
-    },[])
+    })
 
     return (
         <div className='w-94 cursor-pointer my-2'>
